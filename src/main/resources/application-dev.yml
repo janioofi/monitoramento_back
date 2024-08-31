@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: monitoramento
+  datasource:
+    url: jdbc:postgresql://localhost:5432/monitoramento
+    driver-class-name: org.postgresql.Driver
+    username: root
+    password: 12345678
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+api:
+  security:
+    token:
+      secret: 12312312312u90d88901
+server:
+  port: 8080
