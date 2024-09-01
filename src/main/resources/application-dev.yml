@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: monitoramento
+  datasource:
+    url: jdbc:postgresql://localhost:5432/monitoramento
+    driver-class-name: org.postgresql.Driver
+    username: root
+    password: 12345678
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jan1ooo.dev@gmail.com
+    password: ${password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+api:
+  security:
+    token:
+      secret: 12312312312u90d88901
+
+server:
+  port: 8080
