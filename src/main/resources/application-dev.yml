@@ -7,7 +7,6 @@ spring:
     username: root
     password: 12345678
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: update
 api:
