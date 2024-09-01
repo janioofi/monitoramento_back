@@ -11,7 +11,6 @@ import com.janioofi.monitoramento.domain.enums.Status;
 import com.janioofi.monitoramento.domain.repositories.AlertRepository;
 import com.janioofi.monitoramento.domain.repositories.DeviceRepository;
 import com.janioofi.monitoramento.domain.repositories.LogRepository;
-import com.janioofi.monitoramento.exceptions.AlertTriggerException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -81,7 +80,7 @@ public class AlertService {
     }
 
     private void triggerAlert(Alert alert, Log data) {
-        log.info("Triggering alert for device {}: {}", data.getDevice().getIdDevice(), alert.getMessage());
+        log.error("Triggering alert for device {}: {}", data.getDevice().getIdDevice(), alert.getMessage());
     }
 
     private Log createLog(Device device, String message, Level level) {

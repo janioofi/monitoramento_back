@@ -2,9 +2,7 @@ package com.janioofi.monitoramento.controllers;
 
 import com.janioofi.monitoramento.domain.dtos.AlertRequestDto;
 import com.janioofi.monitoramento.domain.dtos.AlertResponseDto;
-import com.janioofi.monitoramento.domain.entities.Alert;
 import com.janioofi.monitoramento.domain.services.AlertService;
-import com.janioofi.monitoramento.exceptions.AlertTriggerException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

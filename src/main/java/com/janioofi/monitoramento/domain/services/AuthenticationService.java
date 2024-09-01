@@ -22,6 +22,7 @@ public class AuthenticationService {
     private final TokenService tokenService;
 
     public LoginResponseDto login(@Valid UserRequestDto user){
+        validateLogin(user);
         var usuarioSenha = new UsernamePasswordAuthenticationToken(user.username(), user.password());
         var auth = authenticationManager.authenticate(usuarioSenha);
         var token = tokenService.generateToken((User) auth.getPrincipal());
@@ -32,6 +33,7 @@ public class AuthenticationService {
 
     public String register(@Valid UserRequestDto user){
         validateRegister(user);
+        validateLogin(user);
         String encryptedPassword = new BCryptPasswordEncoder().encode(user.password());
         User data = new User(null, user.username(), encryptedPassword);
         repository.save(data);
@@ -42,6 +44,12 @@ public class AuthenticationService {
     private void validateRegister(UserRequestDto user){
         if(this.repository.findByUsername(user.username()).isPresent()){
             throw new DataIntegrityViolationException("Já existe um usuário cadastrado com o mesmo username");
+        }
+    }
+
+    private void validateLogin(UserRequestDto user){
+        if(user.username().isEmpty() ||  user.password().isEmpty()){
+            throw new DataIntegrityViolationException("Todos os campos precisam ser preenchidos");
         }
     }
 }

@@ -23,7 +23,7 @@ public class LogService {
     private final DeviceRepository deviceRepository;
     private final AlertService alertService;
 
-    @Scheduled(fixedRate = 1_000 * 60)
+    @Scheduled(fixedRate = 30_000)
     public void generateLogs() {
         List<Device> devices = deviceRepository.findAll();
         devices.forEach(device -> {
@@ -33,16 +33,18 @@ public class LogService {
     }
 
     private void checkAndUpdateDeviceStatus(Device device) {
-        if (isDeviceInactive(device)) {
-            updateDeviceStatus(device, Status.INATIVO);
-        } else {
-            updateDeviceStatus(device, Status.EM_FALHA);
-        }
-        alertService.checkAndTriggerAlertsManually(device);
-    }
+        LocalDateTime lastPing = device.getLastPing();
+        LocalDateTime now = LocalDateTime.now();
 
-    private boolean isDeviceInactive(Device device) {
-        return device.getLastPing().isBefore(LocalDateTime.now().minusMinutes(2));
+        if (lastPing.isAfter(now.minusMinutes(1))) {
+            updateDeviceStatus(device, Status.ATIVO);
+        } else if (lastPing.isAfter(now.minusMinutes(2))) {
+            updateDeviceStatus(device, Status.EM_FALHA);
+        } else {
+            updateDeviceStatus(device, Status.INATIVO);
+        }
+
+        alertService.checkAndTriggerAlertsManually(device);
     }
 
     private void updateDeviceStatus(Device device, Status status) {

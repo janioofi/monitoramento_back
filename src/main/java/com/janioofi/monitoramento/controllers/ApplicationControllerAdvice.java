@@ -1,13 +1,11 @@
 package com.janioofi.monitoramento.controllers;
 
-import com.janioofi.monitoramento.exceptions.AlertTriggerException;
 import com.janioofi.monitoramento.exceptions.ResourceNotFoundException;
 import com.janioofi.monitoramento.exceptions.ValidationErrors;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -52,11 +50,5 @@ public class ApplicationControllerAdvice {
     public String dataIntegrityViolationException(DataIntegrityViolationException ex) {
         log.error(ex.getMessage());
         return ex.getMessage();
-    }
-
-    @ExceptionHandler(AlertTriggerException.class)
-    public ResponseEntity<String> handleAlertTriggerException(AlertTriggerException ex) {
-        log.error(ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
