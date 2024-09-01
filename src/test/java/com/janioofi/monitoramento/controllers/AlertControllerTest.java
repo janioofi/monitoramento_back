@@ -36,8 +36,8 @@ class AlertControllerTest {
     @BeforeEach
     void setUp() {
         alertId = UUID.randomUUID();
-        alertRequestDto = new AlertRequestDto(alertId, "Critical alert", Level.CRITICO);
-        alertResponseDto = new AlertResponseDto(alertId, "CRITICO", "Critical alert", alertId);
+        alertRequestDto = new AlertRequestDto("Critical alert", Level.CRITICO);
+        alertResponseDto = new AlertResponseDto(alertId, "CRITICO", "Critical alert");
     }
 
     @Test

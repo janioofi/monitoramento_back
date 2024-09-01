@@ -5,6 +5,7 @@ import com.janioofi.monitoramento.domain.dtos.AlertResponseDto;
 import com.janioofi.monitoramento.domain.dtos.Mapper;
 import com.janioofi.monitoramento.domain.entities.Alert;
 import com.janioofi.monitoramento.domain.entities.Device;
+import com.janioofi.monitoramento.domain.entities.EmailModel;
 import com.janioofi.monitoramento.domain.entities.Log;
 import com.janioofi.monitoramento.domain.enums.Level;
 import com.janioofi.monitoramento.domain.enums.Status;
@@ -28,6 +29,7 @@ public class AlertService {
     private final AlertRepository alertRepository;
     private final LogRepository logRepository;
     private final DeviceRepository deviceRepository;
+    private final EmailService emailService;
 
     @Scheduled(fixedRate = 1_000 * 60)
     public void checkLogsForAlerts() {
@@ -63,7 +65,6 @@ public class AlertService {
     public AlertResponseDto createAlert(AlertRequestDto requestDto) {
         Alert alert = new Alert();
         alert.setLevel(requestDto.level());
-        alert.setDeviceId(requestDto.deviceId());
         alert.setMessage(requestDto.message());
         alertRepository.save(alert);
         return Mapper.toDto(alert);
@@ -81,6 +82,7 @@ public class AlertService {
 
     private void triggerAlert(Alert alert, Log data) {
         log.error("Triggering alert for device {}: {}", data.getDevice().getIdDevice(), alert.getMessage());
+        sendEmail(alert, data);
     }
 
     private Log createLog(Device device, String message, Level level) {
@@ -98,5 +100,17 @@ public class AlertService {
             case INATIVO -> Level.CRITICO;
             default -> Level.NORMAL;
         };
+    }
+
+    private void sendEmail(Alert alert, Log data) {
+        String subject = "Alert for Device " + data.getDevice().getIdDevice();
+        String text = "Alert message: " + alert.getMessage() + "\nDetails: " + data.getMessage() +  "\nDevice: " + data.getDevice().getName();
+
+        EmailModel emailModel = new EmailModel();
+        emailModel.setEmailTo("janioofi@gmail.com");
+        emailModel.setSubject(subject);
+        emailModel.setText(text);
+
+        emailService.sendEmail(emailModel);
     }
 }

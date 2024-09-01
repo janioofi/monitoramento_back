@@ -5,6 +5,7 @@ import com.janioofi.monitoramento.domain.dtos.AlertResponseDto;
 import com.janioofi.monitoramento.domain.dtos.Mapper;
 import com.janioofi.monitoramento.domain.entities.Alert;
 import com.janioofi.monitoramento.domain.entities.Device;
+import com.janioofi.monitoramento.domain.entities.EmailModel;
 import com.janioofi.monitoramento.domain.entities.Log;
 import com.janioofi.monitoramento.domain.enums.Level;
 import com.janioofi.monitoramento.domain.enums.Status;
@@ -37,6 +38,9 @@ class AlertServiceTest {
     @Mock
     private DeviceRepository deviceRepository;
 
+    @Mock
+    private EmailService emailService;
+
     @InjectMocks
     private AlertService alertService;
 
@@ -53,12 +57,10 @@ class AlertServiceTest {
         alert.setIdAlert(alertId);
         alert.setLevel(Level.ERRO);
         alert.setMessage("Error Alert");
-        alert.setDeviceId(UUID.randomUUID());
 
-        alertRequestDto = new AlertRequestDto(alert.getDeviceId(), "Error Alert",Level.ERRO);
+        alertRequestDto = new AlertRequestDto("Error Alert", Level.ERRO);
 
         device = new Device();
-        device.setIdDevice(alert.getDeviceId());
         device.setStatus(Status.EM_FALHA);
         device.setLastPing(LocalDateTime.now());
 
@@ -88,7 +90,6 @@ class AlertServiceTest {
         assertEquals(Mapper.toDto(alert), result);
         verify(alertRepository, times(1)).save(any(Alert.class));
     }
-
 
     @Test
     void getAllAlerts_ShouldReturnListOfAlertResponseDto() {
@@ -125,6 +126,7 @@ class AlertServiceTest {
 
         // Assert
         verify(logRepository, times(1)).save(any(Log.class));
+        verify(emailService, times(1)).sendEmail(any(EmailModel.class));
     }
 
     @Test
@@ -137,6 +139,7 @@ class AlertServiceTest {
 
         // Assert
         verify(logRepository, times(1)).save(any(Log.class));
+        verify(emailService, times(1)).sendEmail(any(EmailModel.class));
     }
 
     @Test
@@ -150,5 +153,6 @@ class AlertServiceTest {
 
         // Assert
         verify(logRepository, never()).save(any(Log.class));
+        verify(emailService, never()).sendEmail(any(EmailModel.class));
     }
 }

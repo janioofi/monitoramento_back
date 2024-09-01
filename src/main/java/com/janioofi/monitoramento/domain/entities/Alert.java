@@ -20,10 +20,6 @@ public class Alert {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID idAlert;
 
-    @Column(nullable = false)
-    private UUID deviceId;
-
-    @Column(nullable = false)
     private String message;
 
     @Column(nullable = false)

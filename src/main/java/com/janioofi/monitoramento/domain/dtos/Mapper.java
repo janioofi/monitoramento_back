@@ -14,6 +14,7 @@ public class Mapper {
         if (device == null) {
             throw new ResourceNotFoundException("Dispositivo não encontrado");
         }
+
         return new DeviceResponseDto(
                 device.getIdDevice(),
                 device.getName(),
@@ -41,6 +42,6 @@ public class Mapper {
         if (alert == null) {
             throw new ResourceNotFoundException("Alerta não encontrado");
         }
-        return new AlertResponseDto(alert.getIdAlert(), alert.getLevel().getDescription(), alert.getMessage(), alert.getDeviceId());
+        return new AlertResponseDto(alert.getIdAlert(), alert.getLevel().getDescription(), alert.getMessage());
     }
 }
