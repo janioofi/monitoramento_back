@@ -60,7 +60,7 @@ public class DeviceService {
                     data.setLocation(request.location());
                     Device updatedDevice = deviceRepository.save(data);
 
-                    logService.logEvent(updatedDevice, determineLevel(updatedDevice.getStatus()),  "Atualização no dispositivo");
+                    logService.logEvent(updatedDevice, determineLevel(updatedDevice.getStatus()),  "O dispositivo " + data.getName() + " foi atualizado");
 
                     return updatedDevice;
                 })

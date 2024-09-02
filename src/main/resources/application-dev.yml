@@ -8,11 +8,11 @@ spring:
     password: 12345678
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
   mail:
     host: smtp.gmail.com
     port: 587
-    username: jan1ooo.dev@gmail.com
+    username: ${email}
     password: ${password}
     properties:
       mail:
@@ -24,6 +24,7 @@ api:
   security:
     token:
       secret: 12312312312u90d88901
-
+email:
+  to: janioofi@gmail.com
 server:
   port: 8080

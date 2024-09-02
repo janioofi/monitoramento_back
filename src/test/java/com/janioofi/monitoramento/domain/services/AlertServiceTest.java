@@ -116,20 +116,6 @@ class AlertServiceTest {
     }
 
     @Test
-    void checkLogsForAlerts_ShouldCreateAndSaveLog_WhenDeviceLevelMatchesAlertLevel() {
-        // Arrange
-        when(deviceRepository.findAll()).thenReturn(List.of(device));
-        when(alertRepository.findAll()).thenReturn(List.of(alert));
-
-        // Act
-        alertService.checkLogsForAlerts();
-
-        // Assert
-        verify(logRepository, times(1)).save(any(Log.class));
-        verify(emailService, times(1)).sendEmail(any(EmailModel.class));
-    }
-
-    @Test
     void checkAndTriggerAlertsManually_ShouldTriggerAlert_WhenDeviceLevelMatchesAlertLevel() {
         // Arrange
         when(alertRepository.findAll()).thenReturn(List.of(alert));

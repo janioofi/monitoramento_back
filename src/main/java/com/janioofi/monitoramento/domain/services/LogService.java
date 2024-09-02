@@ -28,7 +28,7 @@ public class LogService {
         List<Device> devices = deviceRepository.findAll();
         devices.forEach(device -> {
             checkAndUpdateDeviceStatus(device);
-            logEvent(device, determineLevel(device.getStatus()), "Atualização");
+            logEvent(device, determineLevel(device.getStatus()), "Verificação de rotina");
         });
     }
 
@@ -43,8 +43,6 @@ public class LogService {
         } else {
             updateDeviceStatus(device, Status.INATIVO);
         }
-
-        alertService.checkAndTriggerAlertsManually(device);
     }
 
     private void updateDeviceStatus(Device device, Status status) {
@@ -67,5 +65,7 @@ public class LogService {
         log.setMessage(message);
         log.setLevel(level);
         logRepository.save(log);
+
+        alertService.checkAndTriggerAlertsManually(device);
     }
 }
