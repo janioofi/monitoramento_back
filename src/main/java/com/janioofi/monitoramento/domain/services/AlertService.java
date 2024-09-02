@@ -10,11 +10,10 @@ import com.janioofi.monitoramento.domain.entities.Log;
 import com.janioofi.monitoramento.domain.enums.Level;
 import com.janioofi.monitoramento.domain.enums.Status;
 import com.janioofi.monitoramento.domain.repositories.AlertRepository;
-import com.janioofi.monitoramento.domain.repositories.DeviceRepository;
 import com.janioofi.monitoramento.domain.repositories.LogRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,25 +27,10 @@ public class AlertService {
 
     private final AlertRepository alertRepository;
     private final LogRepository logRepository;
-    private final DeviceRepository deviceRepository;
     private final EmailService emailService;
 
-    @Scheduled(fixedRate = 1_000 * 60)
-    public void checkLogsForAlerts() {
-        List<Device> devices = deviceRepository.findAll();
-        List<Alert> alerts = alertRepository.findAll();
-
-        devices.forEach(device -> {
-            Level deviceLevel = mapStatusToLevel(device.getStatus());
-            alerts.forEach(alert -> {
-                if (deviceLevel.equals(alert.getLevel())) {
-                    Log log = createLog(device, alert.getMessage(), deviceLevel);
-                    logRepository.save(log);
-                    triggerAlert(alert, log);
-                }
-            });
-        });
-    }
+    @Value(value = "${email.to}")
+    private String emailTo;
 
     public void checkAndTriggerAlertsManually(Device device) {
         List<Alert> alerts = alertRepository.findAll();
@@ -102,12 +86,12 @@ public class AlertService {
         };
     }
 
-    private void sendEmail(Alert alert, Log data) {
-        String subject = "Alert for Device " + data.getDevice().getIdDevice();
-        String text = "Alert message: " + alert.getMessage() + "\nDetails: " + data.getMessage() +  "\nDevice: " + data.getDevice().getName();
+    private void sendEmail(Alert alert, Log log) {
+        String subject = "Alert for Device " + log.getDevice().getIdDevice();
+        String text = "Alert message: " + alert.getMessage() +  "\nDevice: " + log.getDevice().getName();
 
         EmailModel emailModel = new EmailModel();
-        emailModel.setEmailTo("janioofi@gmail.com");
+        emailModel.setEmailTo(emailTo);
         emailModel.setSubject(subject);
         emailModel.setText(text);
 
