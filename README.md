@@ -1,4 +1,4 @@
-# Back-end do sistema Controle Financeiro 💻
+# Back-end do sistema Monitoramento de Dispositivo 💻
 
 ## O que é este projeto
 Este projeto é uma API Rest para um sistema de monitoramento de dispositivos conectados à internet. A aplicação permite o gerenciamento de dispositivos, visualização de status, configuração de alertas e geração de logs. Os alertas são aplicáveis a todos os dispositivos, e o sistema é projetado para enviar notificações por e-mail quando um alerta é disparado.
