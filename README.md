@@ -28,8 +28,8 @@ https://localhost:8080/swagger-ui/index.html
 ![testes_unitarios](https://github.com/user-attachments/assets/fe55e2e6-237c-4265-b672-148780809916)
 
 ## Build  do projeto
-- Clonar o repositório: `git clone https://github.com/janioofi/monitoramento.git`
-- Entrar na pasta do projeto: `cd monitoramento`
+- Clonar o repositório: `git clone https://github.com/janioofi/monitoramento_back.git`
+- Entrar na pasta do projeto: `cd monitoramento_back`
   - Será necessário atualizar o arquivo application-dev.yml, atualizar as propriedades mail.username e mail.password.
 - Limpar o diretório target e reconstruir o projeto: `mvn clean install`
 - Rodar o projeto: `mvn spring-boot:run`
